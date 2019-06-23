@@ -1,0 +1,30 @@
+
+
+powershell db scaffold
+    caffold-DbContext "Server=.;Database=FlixOneStore;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Customers 
+
+Create Controller Scaffold: 
+    error: {
+        message: 
+            "There was an error running the selected code generator: 
+            'Method not found: Void Microsoft.EntityFrameworkCrore.Design.Internal.DbContextOperations..ctor 
+            (Microsoft.EntityFrameworkCore.Design.Internal.IOperationReporter, System.Reflection.Assembly, System.Reflection.Assembly)'.'
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

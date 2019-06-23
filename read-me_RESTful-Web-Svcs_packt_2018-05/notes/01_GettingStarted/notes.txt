@@ -1,0 +1,9 @@
+URI Scheme: 
+    example: 
+        https   :   //  www.flipkart.com/men/tshirts/pr     ?    sid=2oq%2Cs9b%2Cj9y
+    <scheme name> : <hierarchical part> [ ? <query> ] [ # <fragment> ]
+    http ":"        // + optional query
+
+    Additional Example: 
+        https://en.wikipedia.org/wiki/Packt     #PacktLib
+                                                [Fragment]

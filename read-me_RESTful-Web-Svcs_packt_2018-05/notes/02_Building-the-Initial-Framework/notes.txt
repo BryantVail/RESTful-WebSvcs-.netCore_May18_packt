@@ -1,0 +1,106 @@
+
+
+requestHeader: 
+    definition: 
+        "header sent with the request for info by the client",
+    Text: 
+        "GET /api/Products HTTP/1.1
+        Host: localhost:44344
+        User-Agent: PostmanRuntime/7.15.0
+        Accept: */*
+        Cache-Control: no-cache
+        Postman-Token: 7fa2d66c-f9a2-46e4-8d4b-41abaa7e6000,d3690685-e2c2-4d1f-8b76-f3c791dc43e6
+        Host: localhost:44344
+        accept-encoding: gzip, deflate
+        Connection: keep-alive
+        cache-control: no-cache"
+
+-----------------------------
+    snippet: 
+        var data = null;
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            console.log(this.responseText);
+        }
+        });
+
+        xhr.open("GET", "https://localhost:44344/api/Products");
+        xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.15.0");
+        xhr.setRequestHeader("Accept", "*/*");
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader("Postman-Token", "7fa2d66c-f9a2-46e4-8d4b-41abaa7e6000,6cd120a8-1467-4b27-98e8-b333f5b1555c");
+        xhr.setRequestHeader("Host", "localhost:44344");
+        xhr.setRequestHeader("accept-encoding", "gzip, deflate");
+        xhr.setRequestHeader("Connection", "keep-alive");
+        xhr.setRequestHeader("cache-control", "no-cache");
+
+        xhr.send(data);
+
+
+----------------------------------------
+Some status codes are (by default) expected from the server for the following HTTP verbs:
+
+    GET: Returns 200 OK
+    POST: Returns 201 CREATED
+    PUT: Returns 200 OK
+    DELETE: Returns 204 NO CONTENT if the operation failed
+
+
+---------------------------------------
+
+DemoECommerceApp.csprojResolveAssemblyReference.cache 
+xunit.runner.visualstudio.dotnetcore.testadapter.dll
+Chap06_02_Test.csprojResolveAssemblyReference.cache
+Chap07_02_Test.csprojResolveAssemblyReference.cache 
+Chap06_03_Test.csprojResolveAssemblyReference.cache 
+Chap07_03_Test.csprojResolveAssemblyReference.cache 
+
+FlixOneProductServices_Test.csproj.CoreCompileInputs.cache 
+FlixOneProductServices_Test.csproj.FileListAbsolute.txt 
+FlixOneProductServices_Test.csprojResolveAssemblyReference.cache
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

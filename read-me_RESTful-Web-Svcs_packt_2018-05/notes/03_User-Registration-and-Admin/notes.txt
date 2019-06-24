@@ -9,7 +9,20 @@ Create Controller Scaffold:
             "There was an error running the selected code generator: 
             'Method not found: Void Microsoft.EntityFrameworkCrore.Design.Internal.DbContextOperations..ctor 
             (Microsoft.EntityFrameworkCore.Design.Internal.IOperationReporter, System.Reflection.Assembly, System.Reflection.Assembly)'.'
+        solution: 
+        "update dotnet to version 2.2
+    },
+    error: {
+        message: 
+            "There was an error running the selected code generator: 
+            'there was an error running the template C:\Users\Bryan\.nuget\packages\microsoft.visualstudio.web.codegenerators.mvc\2.2.3\Templates\ControllerGenerator\ApiControllerWithContext.cshtml: Template Processing Failed: (4, 47): error CS0234: The type or namespace name 'Hosting' does not exist in the namespace 'Microsoft.AspNetCore.Razor' (are you missing an assembly reference?)
+            (10,41): error CS0234: The type or namespace name 'Hosting' does not exist in the namespace 'Microsoft.AspNetCore.Razor' (are you missing an assembly reference?)',
+        solution: 
+            "updated .net core to 2.2, removed the 3rd decimal for 2.2.5 on 
+                <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2" />"
     }
+    
+    
 
 
 

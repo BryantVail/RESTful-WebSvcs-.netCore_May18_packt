@@ -39,6 +39,7 @@ namespace DemoECommerceApp.Security.OAuth
                 {
                     var customerId = profileContext.Subject.Claims.FirstOrDefault(x => x.Type == "sub");
 
+                    //if customerId.Value has a value- then
                     if (!string.IsNullOrEmpty(customerId.Value))
                     {
                         var customer = await _context.Customers

@@ -23,7 +23,15 @@ Create Controller Scaffold:
     }
     
     
+__________________________________________________
 
+(constant) string ClaimTypes.Name = 
+    http://Schemas.xmlsoap.org/ws/2005/05/identity/claims/name 
+    description: 
+        "The URI for a claim that specifies the name of an entity, http://Schemas.xmlsoap.org/ws/2005/05/identity/claims/name
+
+
+__________________________________________________
 
 
 

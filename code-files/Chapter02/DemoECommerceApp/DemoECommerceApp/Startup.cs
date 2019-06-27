@@ -1,9 +1,12 @@
 ﻿using DemoECommerceApp.Interfaces;
 using DemoECommerceApp.Models;
+using DemoECommerceApp.OAuth;
 using DemoECommerceApp.Security.Authentication;
 //using DemoECommerceApp.Data;
 using DemoECommerceApp.Services;
+
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +34,30 @@ namespace DemoECommerceApp
             services.AddAuthentication("Basic")
                 .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>("Basic", null);
             services.AddTransient<IAuthenticationHandler, BasicAuthenticationHandler>();
-            
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme =
+                    JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme =
+                    JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(o =>
+            {
+                o.Authority = "http://localhost:57571";
+                o.Audience = "FlixOneStore.ReadAccess";
+                o.RequireHttpsMetadata = false;
+            });
+
+
+
+            //IdentityServer
+            services.AddIdentityServer()
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddProfileService<ProfileService>()
+                .AddDeveloperSigningCredential();
+
             //db connection
             var connection = @"Server=localhost\SQLExpress;Database=FlixOneStore;Trusted_Connection=True";
             services.AddDbContext<FlixOneStoreContext>(

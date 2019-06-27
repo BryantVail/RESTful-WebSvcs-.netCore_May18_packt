@@ -48,6 +48,7 @@ namespace DemoECommerceApp.Controllers
             var ident = User.Identity as ClaimsIdentity;
             var currentLoggedInUserId = ident.Claims.FirstOrDefault(
                 c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
             if(currentLoggedInUserId != id.ToString())
             {
                 //not authorized

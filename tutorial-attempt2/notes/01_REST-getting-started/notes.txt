@@ -72,13 +72,13 @@ REST Constraints: {
 			3. Caching
 				*. If there is a Cache-Control header with the max-age or s-maxage directive in the response, 
 					*-. the Expires header is ignored.
-				i. avoid generating the same data w/each req
-				ii. store either on client or server
+				i. purpose: avoid generating the same data w/each req
+				ii. where: store either on client or server
 				iii. management
 					a. caution to not send out stale or 'outdated' data
 				iv. http info: 
 					a. case-insensitive
-					b. multiple comma delimited
+					b. multiple values: represent as comma delimited
 					c. optional argument
 						1. accepted syntax
 							i. token
@@ -102,7 +102,7 @@ REST Constraints: {
 					B. Expiration: 
 						a. max-age=<seconds>
 							1. max time a resource is considered fresh
-								-relative to the time of the req
+								-relative to the 'Date' header, or the time of the request 
 						b. max-stale[=<seconds>]
 							1. client is willing to accept a response that has exceeded its expiration time
 							2. optionally: 
@@ -165,9 +165,108 @@ REST Constraints: {
 							1. indicates NOT to retrieve new data
 								a. server wishes the client to obtain a response only 1x, then cache
 								b. from this moment, client should release a cached copy & avoid contacting the origin server to see if a newer copy exists. 
+			4. Code on Demand: {
+				use: service may try to execute code on-demand to extend functionality, 
+					-not every service does this
+					-'optional'
+				example: 
+					1. ticket service
+						a. retrieve tickets
+						b. show info in a JS Alert
+						method: {
+							send javascript with info body response, 
+							when response is received by client > 
+							code is run & alert is shownf
+						}
+			},
+			5. Uniform Interface: {
+				 
+				use: decoupling; interfaces are created to loosely couple our architecture
+				interfaceConstraints: [
+					1. identificationOfResource: 
+						uri is used to id a resource; a web doc,
+					2. Manipulation of Resources through representations: 
+						when a client is given a resource, 
+							-along w/any metadata, 
+						they should have info to: 
+							modify || delete a resource 
+					3. self-descriptive messages: 
+						messages passed should contain info about the data to be understood & processed for further ops
+							-mime types: Multipurpose Internet Mail Extensions (MIME)
+					4. Hypermedia as the engine of the application state (HATEOAS):{
+						representation returned from the service should contain all the future actions as links, 
+							-same as getting links on a website providing different operations
+					}
+				]
+				http-verbs: [
+					{
+						method:		GET, 
+						operation: 	read/retrieve resource 
+						methodType: safe 
+					},
+					{
+						method: 	PUT, 
+						operation: 	insert new, or update existing,
+						methodType: Idempotent,
+						notes: [
+							"complete URI (perhaps an Id) is necessary for 'put' to work"
+						]
+					},
+					{
+						method: 	POST,
+						operation: 	insert new, can also update, 
+						methodType: non-idempotent, 
+						notes: [
+							"
+							POST versus PUT: This is a very common topic of discussion on the internet, and one that is very easy to understand. Both POSTandPUT can be used to insert or update a resource. However, POSTis nonidempotent, meaning that it isn't repeatable. The reason is that each time you call using POST, it will create a new resource if you don't provide the exact URI of the resource. The next time you use POST, it will again create a new resource. However, inPUT, it will first validate the existence of the resource. If it exists, it will update it; otherwise, it will create it.
+							",
+							"used with an id, will not create a new resource"
+					},
+					{
+						method: 	DELETE, 
+						operation: 	delete, 
+						methodType: idempotent
+					},
+					{
+						method: 	OPTIONS,
+						operation: 	get allowed operations, 
+						methodType: safe
+					}, 
+					{
+						method: 	HEAD, 
+						operation: 	return only response headers w/no body, 
+						methodType: safe
+					}
+				]
+				
+			}, 
+			6. Layered System: {
+				notes: [
+					"each layer is restricted to ONLY see or know the next layer in the hierarchy",
+					"maintainability enhanced",
+					"no client should be able to say they're connected to the final (data) layer" 
+				],
 
-
+			}
+},
+- - - - - - - - - - - - - - - - - - - -
+Advantages & disadvantages of RESTful services: {
+	advantages: [
+		"no dependency on platform or programming language", 
+		"standardized methods", 
+		"stateless; no state stored on the server",
+		"supports caching",
+		"mobile, web, or desktop"
+	], 
+	disadvantages: [
+		"standards must be followed correctly, or difficulty will occur with clients using the service", 
+		"documentation can be problematic w/no metadata provided",
+		"security must be implemented",
+		"no restriction to resources can be a security concern if this type of service is implemented"
+	]
+	
 }
+
 
 
 

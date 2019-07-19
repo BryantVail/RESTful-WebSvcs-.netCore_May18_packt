@@ -1,0 +1,190 @@
+
+_____________________________________________________
+sections: [
+    
+    LayingTheFoundation: {
+        topicsOfChapter: [
+            "all about web services; rest & soap",
+            "running the dev server",
+            "REST verbs and status codes",
+            "implementation of verbs in ASP.NET Core WebAPI",
+            "Examples using postman",
+            "soap vs rest",
+            "single-page application model w/REST api",
+            "service oriented architecture (SOA) overview w/REST"
+        ]
+    },
+    SOAP: {
+        acronym: "Simple Object Access Protocol",
+        notes: [
+            "soap relies on application layer protocols",
+                -"most often"
+                    -"http"
+                        -"runs on EVERY operating system"
+                    -"smtp"
+            "web svcs can be called from ANY platform using ANY language
+
+        ],
+        sections: [
+            {
+                name: "soap structure",
+                notes: [
+                    "xml doc", 
+
+                ],
+                aspects: [
+                    {
+                        name: envelope, 
+                        notes: [
+                            mandatory, 
+                            defines the beginning & end of the message
+                        ]
+                    },
+                    {
+                        name: header
+                        notes: [
+                            optional element of the SOAP message, 
+                            used to process the data, 
+                        ]
+                    },
+                    {
+                        name: body, 
+                        notes: [
+                            message thats main, 
+                        ]
+                    }, 
+                    {
+                        name: fault, 
+                        notes: [
+                            if errors populate, this can be used to offer info about them
+                        ]
+                    }
+                ],
+                receiver: {
+                    description: notified by the envelope, 
+                }
+            },
+            {
+                name: "important points about SOAP",
+                example: "
+                        <?xml version = "1.0"?>
+                        <SOAP-ENV:Envelope 
+                        xmlns:SOAP-ENV = "http://www.w3.org/2001/12/soap-envelope" 
+                        SOAP-ENV:encodingStyle = "http://www.w3.org/2001/12/soap-encoding">
+                        ...
+                        SOAP Message information goes here
+                        ...
+                        </SOAP-ENV:Envelope>
+                ",
+                notes: [
+
+                ],
+                aspects: [
+                    envelope: {
+                        "description: root of the message; mandatory"
+                    },
+                    body: {
+                        description: exactly one body element, 
+                    },
+                    header: {
+                        notes: [
+                            optional, 
+                            one only if present
+                        ]
+                    },
+                    ENV: {
+                        description: [
+                            namespace element prefix
+                        ]
+                        notes: [
+                            with the ENVELOPE build one SOAP envelope 
+                        ]
+                    },
+                    encodingStyle: [
+                        description: "defines data types used in the document",
+                        notes: [
+                            gives generalization of the data types that appear in the message,
+                            will apply encoding rules to the element's contents and all child elements, 
+                        ]
+                    ]
+                ],
+            },
+            {
+                name: "SOAP with HTTP POST",
+                example: {
+                    description: "http header of a post request",
+                    string: "POST /Authors HTTP/1.1"
+                }
+                notes: [
+                    "'Authors' http header is the URL of the controller or program to be invoked that has a POST action method inside it"
+                ],
+                aspects: [
+
+                ]
+            }
+        ]//end SOAP.sections list
+    }//end SOAP section
+    REST: {
+        description: "architectural style for establishing standards between networked computer systems",
+        notes: [
+            "It is common to use the term 'RESTful' Services for those that remain compliant to the REST Style.",
+            "reliability, optimized performance, and scalability"
+        ]
+        sections: [
+            {
+                name: "Server and Client are Independent",
+                description: "no tie between server & client",
+                notes: [
+                    "URL dependent",
+                    "code can be changed on the server without impacting the client",
+                ],
+                aspects: [
+                    {
+                        name: "endpoints",
+                        notes: [
+                            "exposed by certain URLs"
+                            "can be easily consumed from different types of clients"
+                                -"mobile, browser, server-side code, +more"
+                        ]
+                    }
+                ]
+            },//end Server-and-Client-are-Independent
+            {
+                name: "Statelessness", 
+                description: "the server does not need to know anything about the client's state and vice versa", 
+                notes: [
+                    "server needs to know which client is requesting data, & how to respond",
+                    "removes overhead from server using this architecture",
+
+                ]
+            }
+        ]
+    }
+]//end sections of the chapter 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

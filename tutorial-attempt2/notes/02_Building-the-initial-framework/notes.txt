@@ -155,9 +155,17 @@ sections: [
                 notes: [
                     "server needs to know which client is requesting data, & how to respond",
                     "removes overhead from server using this architecture",
+					"components can be managed independently, updated flawlessly, reused without impacting the system as a whole."
 
                 ]
-            }
+            },
+			{
+				name: "Setting up the environment",
+				description: "",
+				notes: [
+					""
+				]
+			}
         ]
     }
 ]//end sections of the chapter 

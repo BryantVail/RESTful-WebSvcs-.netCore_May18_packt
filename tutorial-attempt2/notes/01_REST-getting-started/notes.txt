@@ -1,7 +1,7 @@
 
 
 _____________________________________
-Restful Services Intro: {
+Restful Services Intro/Discussing RESTful services: {
 
 	stateless: 
 		a. responses are served & forgotten
@@ -20,254 +20,271 @@ Restful Services Intro: {
 		d. "The Uniform Interface"
 
 
-}
+	- - - - - - - - - - - - - - - - - - - -
+	Resource Oriented Architecture: {
 
-- - - - - - - - - - - - - - - - - - - -
-Resource Oriented Architecture: {
+		Uniform Resource Locator: 
+			a. 'URI'
+				1. definition
+					i. <scheme name> : <hierarchical part> [ ? <query> ] [ # <fragment> ]
+						a. schemeName
+							a. http
+							b. ftp
+						b. hierarchical piece
+						c. query (optional)
+						d. fragment (optional)
+				2. example: 
+					i. https://www.flipkart.com/men/tshirts/pr?sid=2oq%2Cs9b%2Cj9y
+						a. https
+						b. //www.flipkart.com/men/tshirts/pr
+						c. ?sid=2oq%2Cs9b%2Cj9y
+				2. Most common URL in use today
+						
+			b. Every Resource on the web has been given a UniqueId
+			c. Hyperlinks
+				1. interconnects resources
+				2. formats: 
+					i. [(X)HTML, JPEG, GIF, WMV, SWF, RSS, ATOM, CSS, JavaScript/JSON]
+	},
 
-	Uniform Resource Locator: 
-		a. 'URI'
-			1. definition
-				i. <scheme name> : <hierarchical part> [ ? <query> ] [ # <fragment> ]
-					a. schemeName
-						a. http
-						b. ftp
-					b. hierarchical piece
-					c. query (optional)
-					d. fragment (optional)
-			2. example: 
-				i. https://www.flipkart.com/men/tshirts/pr?sid=2oq%2Cs9b%2Cj9y
-					a. https
-					b. //www.flipkart.com/men/tshirts/pr
-					c. ?sid=2oq%2Cs9b%2Cj9y
-			2. Most common URL in use today
+
+	- - - - - - - - - - - - - - - - - - - -
+	REST Constraints: {
+
+		constraints: 
+			a. each enforce a design for the service that is to be followed
+			b. if not followed: 
+				1. service isn't RESTful
+			c. ConstraintTypes: 
+				1. Client-Server Architecture
+					i. removed from how the server processes data
+					ii. server should NOT depend on the client's implementation
+						a. ESPECIALLY the 'UI'
+				2. Stateless: 
+					i. app state is NOT maintained
+					ii. reqs do not depend on past requests
+						a. service treats EACH req independently
+						b. very easy
+							1. hosting
+							2. maintenance
+				3. Caching
+					*. If there is a Cache-Control header with the max-age or s-maxage directive in the response, 
+						*-. the Expires header is ignored.
+					i. purpose: avoid generating the same data w/each req
+					ii. where: store either on client or server
+					iii. management
+						a. caution to not send out stale or 'outdated' data
+					iv. http info: 
+						a. case-insensitive
+						b. multiple values: represent as comma delimited
+						c. optional argument
+							1. accepted syntax
+								i. token
+								ii. quoted-string 
+					v. http headers (of significance to caching)
+						a. Date
+							1. date & time of generation of representation
+						b. Last Modified
+							1. date & time when the representation was last modified by the server
+						c. Cache Control
+							1. http 1.1 header used to control caching. 
+						d. Expires
+							1. tag an expiration date & time for the representation
+						e. Age
+							1. time in seconds since the representation was fetched from the server
+					vi. (request) Client Directives: 
+						A. Cacheability: 
+							a. no-cache
+							b. no-store
+								1. the cache should not store anything about the client request or server resp
+						B. Expiration: 
+							a. max-age=<seconds>
+								1. max time a resource is considered fresh
+									-relative to the 'Date' header, or the time of the request 
+							b. max-stale[=<seconds>]
+								1. client is willing to accept a response that has exceeded its expiration time
+								2. optionally: 
+									-assign value in seconds, indicating the time the response must not be expired by
+							c. min-fresh= <seconds>
+								1. client wants a resp that will still be fresh for at least the specified number of seconds
+							d. stale-while-revalidate=<seconds> (extension or 'not core http')
+								1.indicates the client is willing to accept a stale resp 
+									i.while asynchronously checking in the background for a fresh one
+							e. stale-if-error=<seconds> (extension or 'not core http')
+								1. client is willing to accept stale response
+									i. if check for fresh fails
+								2. 2nd value indicates for how long the client will accept the stale response after initial expiration
+						f. no-transform
+						g. only-if-cached
+					vii. (response) Server Directives
+						A. Cacheability
+							a. no-cache
+								1. forces caches to submit the req to the origin server for validation before releasing a cached copy
+							b. no-store
+								1. (same as client definition) the cache should not store anything about the client request or server resp
+							c. public
+								1. may be cached by ANY cache
+							d. private
+								1. single user cache
+						B. Expiration: 
+							a. max-age=<seconds>
+								1. max time a resource is considered fresh
+									-relative to the time of the req
+							b. s-maxage=<seconds> 
+								1. precedence over:  
+									max-age or 
+									'Expires' header
+								2. applies to shared caches only
+						C. Revalidation and Reloading: 
+							a. must-revalidate
+								1. once a resource is stale (max-age has expired) 
+								2. cache must not use the response to satisfy subsequent reqs for this resource w/out successful validation on origin server
+							b. proxy-revalidate
+								1. applies to shared caches
+								2. ignored by private cache
+								3. (same as 'must-revalidate')
+							c. immutable: 
+								1. resp body will not change over time
+								2. unchanged on the server
+									a. client should not send conditional revalidation for it
+										i. if-none-match || if-modified-since
+								3. clients not aware of the extension MUST ignore them
+									-per HTTP specification
+								4. (firefox) only honored on https:// schemeName
+						D. Other
+							a. no-transform
+								1. no transformations or conversions should be made to the resource
+									a. Headers: [content-encoding, content-range, content-type] must not be modified by a proxy. 
+								2. non-transparent proxy || browser feature such as 'google light mode' may convert between image formats 
+									-in order to save cache space
+									-reduce traffic amount on a slow link
+									-'no-transform' disallows this conversion
+							b. only-if-cached
+								1. indicates NOT to retrieve new data
+									a. server wishes the client to obtain a response only 1x, then cache
+									b. from this moment, client should release a cached copy & avoid contacting the origin server to see if a newer copy exists. 
+				4. Code on Demand: {
+					use: service may try to execute code on-demand to extend functionality, 
+						-not every service does this
+						-'optional'
+					example: 
+						1. ticket service
+							a. retrieve tickets
+							b. show info in a JS Alert
+							method: {
+								send javascript with info body response, 
+								when response is received by client > 
+								code is run & alert is shownf
+							}
+				},
+				5. Uniform Interface: {
 					
-		b. Every Resource on the web has been given a UniqueId
-		c. Hyperlinks
-			1. interconnects resources
-			2. formats: 
-				i. [(X)HTML, JPEG, GIF, WMV, SWF, RSS, ATOM, CSS, JavaScript/JSON]
-},
-
-
-- - - - - - - - - - - - - - - - - - - -
-REST Constraints: {
-
-	constraints: 
-		a. each enforce a design for the service that is to be followed
-		b. if not followed: 
-			1. service isn't RESTful
-		c. ConstraintTypes: 
-			1. Client-Server Architecture
-				i. removed from how the server processes data
-				ii. server should NOT depend on the client's implementation
-					a. ESPECIALLY the 'UI'
-			2. Stateless: 
-				i. app state is NOT maintained
-				ii. reqs do not depend on past requests
-					a. service treats EACH req independently
-					b. very easy
-						1. hosting
-						2. maintenance
-			3. Caching
-				*. If there is a Cache-Control header with the max-age or s-maxage directive in the response, 
-					*-. the Expires header is ignored.
-				i. purpose: avoid generating the same data w/each req
-				ii. where: store either on client or server
-				iii. management
-					a. caution to not send out stale or 'outdated' data
-				iv. http info: 
-					a. case-insensitive
-					b. multiple values: represent as comma delimited
-					c. optional argument
-						1. accepted syntax
-							i. token
-							ii. quoted-string 
-				v. http headers (of significance to caching)
-					a. Date
-						1. date & time of generation of representation
-					b. Last Modified
-						1. date & time when the representation was last modified by the server
-					c. Cache Control
-						1. http 1.1 header used to control caching. 
-					d. Expires
-						1. tag an expiration date & time for the representation
-					e. Age
-						1. time in seconds since the representation was fetched from the server
-				vi. (request) Client Directives: 
-					A. Cacheability: 
-						a. no-cache
-						b. no-store
-							1. the cache should not store anything about the client request or server resp
-					B. Expiration: 
-						a. max-age=<seconds>
-							1. max time a resource is considered fresh
-								-relative to the 'Date' header, or the time of the request 
-						b. max-stale[=<seconds>]
-							1. client is willing to accept a response that has exceeded its expiration time
-							2. optionally: 
-								-assign value in seconds, indicating the time the response must not be expired by
-						c. min-fresh= <seconds>
-							1. client wants a resp that will still be fresh for at least the specified number of seconds
-						d. stale-while-revalidate=<seconds> (extension or 'not core http')
-							1.indicates the client is willing to accept a stale resp 
-								i.while asynchronously checking in the background for a fresh one
-						e. stale-if-error=<seconds> (extension or 'not core http')
-							1. client is willing to accept stale response
-								i. if check for fresh fails
-							2. 2nd value indicates for how long the client will accept the stale response after initial expiration
-					f. no-transform
-					g. only-if-cached
-				vii. (response) Server Directives
-					A. Cacheability
-						a. no-cache
-							1. forces caches to submit the req to the origin server for validation before releasing a cached copy
-						b. no-store
-							1. (same as client definition) the cache should not store anything about the client request or server resp
-						c. public
-							1. may be cached by ANY cache
-						d. private
-							1. single user cache
-					B. Expiration: 
-						a. max-age=<seconds>
-							1. max time a resource is considered fresh
-								-relative to the time of the req
-						b. s-maxage=<seconds> 
-							1. precedence over:  
-								max-age or 
-								'Expires' header
-							2. applies to shared caches only
-					C. Revalidation and Reloading: 
-						a. must-revalidate
-							1. once a resource is stale (max-age has expired) 
-							2. cache must not use the response to satisfy subsequent reqs for this resource w/out successful validation on origin server
-						b. proxy-revalidate
-							1. applies to shared caches
-							2. ignored by private cache
-							3. (same as 'must-revalidate')
-						c. immutable: 
-							1. resp body will not change over time
-							2. unchanged on the server
-								a. client should not send conditional revalidation for it
-									i. if-none-match || if-modified-since
-							3. clients not aware of the extension MUST ignore them
-								-per HTTP specification
-							4. (firefox) only honored on https:// schemeName
-					D. Other
-						a. no-transform
-							1. no transformations or conversions should be made to the resource
-								a. Headers: [content-encoding, content-range, content-type] must not be modified by a proxy. 
-							2. non-transparent proxy || browser feature such as 'google light mode' may convert between image formats 
-								-in order to save cache space
-								-reduce traffic amount on a slow link
-								-'no-transform' disallows this conversion
-						b. only-if-cached
-							1. indicates NOT to retrieve new data
-								a. server wishes the client to obtain a response only 1x, then cache
-								b. from this moment, client should release a cached copy & avoid contacting the origin server to see if a newer copy exists. 
-			4. Code on Demand: {
-				use: service may try to execute code on-demand to extend functionality, 
-					-not every service does this
-					-'optional'
-				example: 
-					1. ticket service
-						a. retrieve tickets
-						b. show info in a JS Alert
-						method: {
-							send javascript with info body response, 
-							when response is received by client > 
-							code is run & alert is shownf
+					use: decoupling; interfaces are created to loosely couple our architecture
+					interfaceConstraints: [
+						1. identificationOfResource: 
+							uri is used to id a resource; a web doc,
+						2. Manipulation of Resources through representations: 
+							when a client is given a resource, 
+								-along w/any metadata, 
+							they should have info to: 
+								modify || delete a resource 
+						3. self-descriptive messages: 
+							messages passed should contain info about the data to be understood & processed for further ops
+								-mime types: Multipurpose Internet Mail Extensions (MIME)
+						4. Hypermedia as the engine of the application state (HATEOAS):{
+							representation returned from the service should contain all the future actions as links, 
+								-same as getting links on a website providing different operations
 						}
-			},
-			5. Uniform Interface: {
-				 
-				use: decoupling; interfaces are created to loosely couple our architecture
-				interfaceConstraints: [
-					1. identificationOfResource: 
-						uri is used to id a resource; a web doc,
-					2. Manipulation of Resources through representations: 
-						when a client is given a resource, 
-							-along w/any metadata, 
-						they should have info to: 
-							modify || delete a resource 
-					3. self-descriptive messages: 
-						messages passed should contain info about the data to be understood & processed for further ops
-							-mime types: Multipurpose Internet Mail Extensions (MIME)
-					4. Hypermedia as the engine of the application state (HATEOAS):{
-						representation returned from the service should contain all the future actions as links, 
-							-same as getting links on a website providing different operations
-					}
-				]
-				http-verbs: [
-					{
-						method:		GET, 
-						operation: 	read/retrieve resource 
-						methodType: safe 
-					},
-					{
-						method: 	PUT, 
-						operation: 	insert new, or update existing,
-						methodType: Idempotent,
-						notes: [
-							"complete URI (perhaps an Id) is necessary for 'put' to work"
-						]
-					},
-					{
-						method: 	POST,
-						operation: 	insert new, can also update, 
-						methodType: non-idempotent, 
-						notes: [
-							"
-							POST versus PUT: This is a very common topic of discussion on the internet, and one that is very easy to understand. Both POSTandPUT can be used to insert or update a resource. However, POSTis nonidempotent, meaning that it isn't repeatable. The reason is that each time you call using POST, it will create a new resource if you don't provide the exact URI of the resource. The next time you use POST, it will again create a new resource. However, inPUT, it will first validate the existence of the resource. If it exists, it will update it; otherwise, it will create it.
-							",
-							"used with an id, will not create a new resource"
-					},
-					{
-						method: 	DELETE, 
-						operation: 	delete, 
-						methodType: idempotent
-					},
-					{
-						method: 	OPTIONS,
-						operation: 	get allowed operations, 
-						methodType: safe
-					}, 
-					{
-						method: 	HEAD, 
-						operation: 	return only response headers w/no body, 
-						methodType: safe
-					}
-				]
-				
-			}, 
-			6. Layered System: {
-				notes: [
-					"each layer is restricted to ONLY see or know the next layer in the hierarchy",
-					"maintainability enhanced",
-					"no client should be able to say they're connected to the final (data) layer" 
-				],
+					]
+					http-verbs: [
+						{
+							method:		GET, 
+							operation: 	read/retrieve resource 
+							methodType: safe 
+						},
+						{
+							method: 	PUT, 
+							operation: 	insert new, or update existing,
+							methodType: Idempotent,
+							notes: [
+								"complete URI (perhaps an Id) is necessary for 'put' to work"
+							]
+						},
+						{
+							method: 	POST,
+							operation: 	insert new, can also update, 
+							methodType: non-idempotent, 
+							notes: [
+								"
+								POST versus PUT: This is a very common topic of discussion on the internet, and one that is very easy to understand. Both POSTandPUT can be used to insert or update a resource. However, POSTis nonidempotent, meaning that it isn't repeatable. The reason is that each time you call using POST, it will create a new resource if you don't provide the exact URI of the resource. The next time you use POST, it will again create a new resource. However, inPUT, it will first validate the existence of the resource. If it exists, it will update it; otherwise, it will create it.
+								",
+								"used with an id, will not create a new resource"
+						},
+						{
+							method: 	DELETE, 
+							operation: 	delete, 
+							methodType: idempotent
+						},
+						{
+							method: 	OPTIONS,
+							operation: 	get allowed operations, 
+							methodType: safe
+						}, 
+						{
+							method: 	HEAD, 
+							operation: 	return only response headers w/no body, 
+							methodType: safe
+						}
+					]
+					
+				}, 
+				6. Layered System: {
+					notes: [
+						"each layer is restricted to ONLY see or know the next layer in the hierarchy",
+						"maintainability enhanced",
+						"no client should be able to say they're connected to the final (data) layer" 
+					],
 
-			}
-},
-- - - - - - - - - - - - - - - - - - - -
-Advantages & disadvantages of RESTful services: {
-	advantages: [
-		"no dependency on platform or programming language", 
-		"standardized methods", 
-		"stateless; no state stored on the server",
-		"supports caching",
-		"mobile, web, or desktop"
+				}
+	},
+	- - - - - - - - - - - - - - - - - - - -
+	Advantages & disadvantages of RESTful services: {
+		advantages: [
+			"no dependency on platform or programming language", 
+			"standardized methods", 
+			"stateless; no state stored on the server",
+			"supports caching",
+			"mobile, web, or desktop"
+		], 
+		disadvantages: [
+			"standards must be followed correctly, or difficulty will occur with clients using the service", 
+			"documentation can be problematic w/no metadata provided",
+			"security must be implemented",
+			"no restriction to resources can be a security concern if this type of service is implemented"
+		]
+		
+	}
+}//end 'discussing RESTful services'
+
+
+_____________________________________
+ASP.NET Core & RESTful services: {
+	features: [
+		"cross-platform", 
+		"open-source", 
+		"cloud-ready",
+		"modular"
 	], 
-	disadvantages: [
-		"standards must be followed correctly, or difficulty will occur with clients using the service", 
-		"documentation can be problematic w/no metadata provided",
-		"security must be implemented",
-		"no restriction to resources can be a security concern if this type of service is implemented"
+	main-concerns-addressed: [
+		"unites the previously separate "ASP.NET MVC" & "ASP.NET Web API" into single programming model",
+		contains: [
+			Controller, Action, Filter, etc?
+		],
+		"built on-top of ASP.NET MVC Runtime",
+		"Web API used to perform actions on the .NET Framework",
+		"Web API auto manages the low-level transport details of HTTP"
 	]
-	
 }
-
-
 
 
 

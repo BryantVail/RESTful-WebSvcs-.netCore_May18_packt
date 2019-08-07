@@ -137,6 +137,7 @@ sections: [
                 notes: [
                     "URL dependent",
                     "code can be changed on the server without impacting the client",
+                    "managed independently, updated flawlessly, and reused without affecting the system as a whole"
                 ],
                 aspects: [
                     {
@@ -155,17 +156,25 @@ sections: [
                 notes: [
                     "server needs to know which client is requesting data, & how to respond",
                     "removes overhead from server using this architecture",
-					"components can be managed independently, updated flawlessly, reused without impacting the system as a whole."
 
                 ]
+            }
+        ]
+    },
+    SettingUpTheEnvironment: {
+        description: "getting aquainted with the project",
+        sections: [
+            {
+                name: "Setting up the environment", 
+                description: "file | new | project, 'asp.net core web application', 'web api'",
+                notes: [
+                    "./Controllers/ValuesController.cs",
+                    "run > 'localhost:{portNumber}/api/Values'"
+                ],
+                
             },
-			{
-				name: "Setting up the environment",
-				description: "",
-				notes: [
-					""
-				]
-			}
+        ],
+
         ]
     }
 ]//end sections of the chapter 
